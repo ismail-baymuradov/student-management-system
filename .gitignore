@@ -1,0 +1,39 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Aa]rtifacts/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Test results
+TestResults/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Local/private configuration
+appsettings.Local.json
+secrets.json
+
+# SQL Server database files
+*.mdf
+*.ldf
+
+# SQLite files if ever used
+*.db
+*.db-shm
+*.db-wal
+
+# OS generated files
+Thumbs.db
+.DS_Store
