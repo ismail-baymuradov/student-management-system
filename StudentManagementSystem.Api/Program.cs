@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StudentManagementSystem.Api.Data;
 using StudentManagementSystem.Api.Features.Students;
+using StudentManagementSystem.Api.Features.Courses;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,5 +27,6 @@ app.MapGet("/", () =>
 
 
 app.MapStudentEndpoints();
+app.MapCourseEndpoints();
 
 app.Run();
