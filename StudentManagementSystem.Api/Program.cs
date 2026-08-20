@@ -4,6 +4,7 @@ using StudentManagementSystem.Api.Features.Students;
 using StudentManagementSystem.Api.Features.Courses;
 using StudentManagementSystem.Api.Features.Departments;
 using StudentManagementSystem.Api.Features.Semesters;
+using StudentManagementSystem.Api.Features.Instructors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,5 +33,6 @@ app.MapStudentEndpoints();
 app.MapCourseEndpoints();
 app.MapDepartmentEndpoints();
 app.MapSemesterEndpoints();
+app.MapInstructorEndpoints();
 
 app.Run();

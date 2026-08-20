@@ -4,7 +4,7 @@ using StudentManagementSystem.Api.Features.Departments.GetDepartment;
 using StudentManagementSystem.Api.Features.Departments.GetDepartments;
 using StudentManagementSystem.Api.Features.Departments.GetDepartmentCourses;
 using StudentManagementSystem.Api.Features.Departments.UpdateDepartment;
-
+using StudentManagementSystem.Api.Features.Departments.GetDepartmentInstructors;
 namespace StudentManagementSystem.Api.Features.Departments;
 
 public static class DepartmentEndpoints
@@ -19,5 +19,6 @@ public static class DepartmentEndpoints
         group.MapUpdateDepartmentEndpoint();
         group.MapDeleteDepartmentEndpoint();
         group.MapGetDepartmentCoursesEndpoint();
+        group.MapGetDepartmentInstructorsEndpoint();
     }
 }

@@ -34,6 +34,18 @@ public static class DeleteDepartmentEndpoint
                 });
             }
 
+            var hasInstructors = await dbContext.Instructors
+                .AnyAsync(i => i.DepartmentId == id);
+
+            if (hasInstructors)
+            {
+                return Results.Conflict(new
+                {
+                    message =
+                        "Department cannot be deleted because it contains instructors."
+                });
+            }
+
             dbContext.Departments.Remove(department);
 
             try

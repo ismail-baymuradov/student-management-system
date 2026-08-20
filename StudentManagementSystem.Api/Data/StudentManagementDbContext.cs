@@ -3,6 +3,7 @@ using StudentManagementSystem.Api.Features.Students;
 using StudentManagementSystem.Api.Features.Courses;
 using StudentManagementSystem.Api.Features.Departments;
 using StudentManagementSystem.Api.Features.Semesters;
+using StudentManagementSystem.Api.Features.Instructors;
 
 namespace StudentManagementSystem.Api.Data;
 
@@ -18,6 +19,7 @@ public class StudentManagementDbContext : DbContext
     public DbSet<Course> Courses => Set<Course>();
     public DbSet<Department> Departments => Set<Department>();
     public DbSet<Semester> Semesters => Set<Semester>();
+    public DbSet<Instructor> Instructors => Set<Instructor>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Student configuration
@@ -116,6 +118,28 @@ semester.ToTable(t =>
         "[RegistrationEnd] <= [EndDate]");
 });
     
+
+    var instructor = modelBuilder.Entity<Instructor>();
+
+instructor.Property(i => i.FirstName)
+    .IsRequired()
+    .HasMaxLength(100);
+
+instructor.Property(i => i.LastName)
+    .IsRequired()
+    .HasMaxLength(100);
+
+instructor.Property(i => i.EmployeeNumber)
+    .IsRequired()
+    .HasMaxLength(20);
+
+instructor.HasIndex(i => i.EmployeeNumber)
+    .IsUnique();
+
+instructor.HasOne(i => i.Department)
+    .WithMany(d => d.Instructors)
+    .HasForeignKey(i => i.DepartmentId)
+    .OnDelete(DeleteBehavior.Restrict);
     }
 
     
