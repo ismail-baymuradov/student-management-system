@@ -1,3 +1,5 @@
+using StudentManagementSystem.Api.Features.Departments;
+
 namespace StudentManagementSystem.Api.Features.Courses;
 
 public class Course
@@ -9,4 +11,7 @@ public class Course
     public string Name { get; set; } = string.Empty;
 
     public int Credits { get; set; }
+public int DepartmentId { get; set; }
+
+public Department Department { get; set; } = null!;
 }

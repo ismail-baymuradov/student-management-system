@@ -54,6 +54,25 @@ public static class CreateCourseEndpoint
                 });
             }
 
+            if (request.DepartmentId <= 0)
+            {
+                return Results.BadRequest(new
+                {
+                    message = "A valid DepartmentId is required."
+                });
+            }
+
+            var departmentExists = await dbContext.Departments
+                .AnyAsync(d => d.Id == request.DepartmentId);
+
+            if (!departmentExists)
+            {
+                return Results.BadRequest(new
+                {
+                    message = "Department does not exist."
+                });
+            }
+
             var codeExists = await dbContext.Courses
                 .AnyAsync(c => c.Code == code);
 
@@ -69,19 +88,30 @@ public static class CreateCourseEndpoint
             {
                 Code = code,
                 Name = name,
-                Credits = request.Credits
+                Credits = request.Credits,
+                DepartmentId = request.DepartmentId
             };
 
             dbContext.Courses.Add(course);
 
             await dbContext.SaveChangesAsync();
 
-            return Results.Created($"/courses/{course.Id}", course);
+            return Results.Created(
+                $"/courses/{course.Id}",
+                new
+                {
+                    course.Id,
+                    course.Code,
+                    course.Name,
+                    course.Credits,
+                    course.DepartmentId
+                });
         });
     }
-
-    public sealed record CreateCourseRequest(
-        string? Code,
-        string? Name,
-        int Credits);
 }
+
+public sealed record CreateCourseRequest(
+    string? Code,
+    string? Name,
+    int Credits,
+    int DepartmentId);

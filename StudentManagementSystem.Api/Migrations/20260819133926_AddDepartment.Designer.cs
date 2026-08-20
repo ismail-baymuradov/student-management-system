@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentManagementSystem.Api.Data;
 
@@ -10,9 +11,11 @@ using StudentManagementSystem.Api.Data;
 namespace StudentManagementSystem.Api.Migrations
 {
     [DbContext(typeof(StudentManagementDbContext))]
-    partial class StudentManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260819133926_AddDepartment")]
+    partial class AddDepartment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +40,7 @@ namespace StudentManagementSystem.Api.Migrations
                     b.Property<int>("Credits")
                         .HasColumnType("int");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -81,7 +84,7 @@ namespace StudentManagementSystem.Api.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("Departments");
+                    b.ToTable("Department");
                 });
 
             modelBuilder.Entity("StudentManagementSystem.Api.Features.Students.Student", b =>
@@ -117,13 +120,9 @@ namespace StudentManagementSystem.Api.Migrations
 
             modelBuilder.Entity("StudentManagementSystem.Api.Features.Courses.Course", b =>
                 {
-                    b.HasOne("StudentManagementSystem.Api.Features.Departments.Department", "Department")
+                    b.HasOne("StudentManagementSystem.Api.Features.Departments.Department", null)
                         .WithMany("Courses")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Department");
+                        .HasForeignKey("DepartmentId");
                 });
 
             modelBuilder.Entity("StudentManagementSystem.Api.Features.Departments.Department", b =>

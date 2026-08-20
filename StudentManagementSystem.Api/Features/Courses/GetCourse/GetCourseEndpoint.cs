@@ -13,7 +13,16 @@ public static class GetCourseEndpoint
         {
             var course = await dbContext.Courses
                 .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .Where(c => c.Id == id)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Code,
+                    c.Name,
+                    c.Credits,
+                    c.DepartmentId
+                })
+                .FirstOrDefaultAsync();
 
             if (course is null)
             {

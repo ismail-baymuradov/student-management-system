@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StudentManagementSystem.Api.Features.Students;
 using StudentManagementSystem.Api.Features.Courses;
+using StudentManagementSystem.Api.Features.Departments;
 
 namespace StudentManagementSystem.Api.Data;
 
@@ -14,7 +15,7 @@ public class StudentManagementDbContext : DbContext
 
     public DbSet<Student> Students => Set<Student>();
     public DbSet<Course> Courses => Set<Course>();
-
+    public DbSet<Department> Departments => Set<Department>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Student configuration
@@ -56,5 +57,24 @@ public class StudentManagementDbContext : DbContext
             t.HasCheckConstraint(
                 "CK_Courses_Credits",
                 "[Credits] >= 1 AND [Credits] <= 30"));
+
+                course.HasOne(c => c.Department)
+    .WithMany(d => d.Courses)
+    .HasForeignKey(c => c.DepartmentId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+        // Department configuration
+        var department = modelBuilder.Entity<Department>();
+
+department.Property(d => d.Code)
+    .IsRequired()
+    .HasMaxLength(20);
+
+department.Property(d => d.Name)
+    .IsRequired()
+    .HasMaxLength(200);
+
+department.HasIndex(d => d.Code)
+    .IsUnique();
     }
 }

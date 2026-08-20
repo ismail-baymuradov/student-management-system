@@ -55,6 +55,25 @@ public static class UpdateCourseEndpoint
                 });
             }
 
+            if (request.DepartmentId <= 0)
+            {
+                return Results.BadRequest(new
+                {
+                    message = "A valid DepartmentId is required."
+                });
+            }
+
+            var departmentExists = await dbContext.Departments
+                .AnyAsync(d => d.Id == request.DepartmentId);
+
+            if (!departmentExists)
+            {
+                return Results.BadRequest(new
+                {
+                    message = "Department does not exist."
+                });
+            }
+
             var course = await dbContext.Courses
                 .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -82,15 +101,24 @@ public static class UpdateCourseEndpoint
             course.Code = code;
             course.Name = name;
             course.Credits = request.Credits;
+            course.DepartmentId = request.DepartmentId;
 
             await dbContext.SaveChangesAsync();
 
-            return Results.Ok(course);
+            return Results.Ok(new
+            {
+                course.Id,
+                course.Code,
+                course.Name,
+                course.Credits,
+                course.DepartmentId
+            });
         });
     }
 
     public sealed record UpdateCourseRequest(
         string? Code,
         string? Name,
-        int Credits);
+        int Credits,
+        int DepartmentId);
 }

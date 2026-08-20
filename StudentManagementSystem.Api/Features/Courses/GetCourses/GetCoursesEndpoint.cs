@@ -11,10 +11,17 @@ public static class GetCoursesEndpoint
             StudentManagementDbContext dbContext) =>
         {
             var courses = await dbContext.Courses
-                .AsNoTracking()
-                .OrderBy(c => c.Code)
-                .ToListAsync();
-
+    .AsNoTracking()
+    .OrderBy(c => c.Code)
+    .Select(c => new
+    {
+        c.Id,
+        c.Code,
+        c.Name,
+        c.Credits,
+        c.DepartmentId
+    })
+    .ToListAsync();
             return Results.Ok(courses);
         });
     }
