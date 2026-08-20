@@ -3,6 +3,7 @@ using StudentManagementSystem.Api.Data;
 using StudentManagementSystem.Api.Features.Students;
 using StudentManagementSystem.Api.Features.Courses;
 using StudentManagementSystem.Api.Features.Departments;
+using StudentManagementSystem.Api.Features.Semesters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,5 +31,6 @@ app.MapGet("/", () =>
 app.MapStudentEndpoints();
 app.MapCourseEndpoints();
 app.MapDepartmentEndpoints();
+app.MapSemesterEndpoints();
 
 app.Run();
