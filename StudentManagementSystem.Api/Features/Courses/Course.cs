@@ -1,4 +1,5 @@
 using StudentManagementSystem.Api.Features.Departments;
+using StudentManagementSystem.Api.Features.CourseOfferings;
 
 namespace StudentManagementSystem.Api.Features.Courses;
 
@@ -14,4 +15,7 @@ public class Course
 public int DepartmentId { get; set; }
 
 public Department Department { get; set; } = null!;
+
+public ICollection<CourseOffering> CourseOfferings { get; set; } = new List<CourseOffering>();
+    
 }

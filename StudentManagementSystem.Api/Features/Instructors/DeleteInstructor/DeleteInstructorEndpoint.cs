@@ -21,7 +21,17 @@ public static class DeleteInstructorEndpoint
                     message = "Instructor not found."
                 });
             }
+var hasOfferings = await dbContext.CourseOfferings
+    .AnyAsync(o => o.InstructorId == id);
 
+if (hasOfferings)
+{
+    return Results.Conflict(new
+    {
+        message =
+            "Instructor cannot be deleted because they are assigned to course offerings."
+    });
+}
             dbContext.Instructors.Remove(instructor);
 
             await dbContext.SaveChangesAsync();

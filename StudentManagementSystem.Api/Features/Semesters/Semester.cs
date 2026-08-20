@@ -1,3 +1,6 @@
+using StudentManagementSystem.Api.Features.CourseOfferings;
+
+
 namespace StudentManagementSystem.Api.Features.Semesters;
 
 public class Semester
@@ -13,4 +16,7 @@ public class Semester
     public DateOnly RegistrationStart { get; set; }
 
     public DateOnly RegistrationEnd { get; set; }
+
+    public ICollection<CourseOffering> CourseOfferings { get; set; }
+    = new List<CourseOffering>();
 }

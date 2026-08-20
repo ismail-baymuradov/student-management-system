@@ -3,6 +3,7 @@ using StudentManagementSystem.Api.Features.Semesters.DeleteSemester;
 using StudentManagementSystem.Api.Features.Semesters.GetSemester;
 using StudentManagementSystem.Api.Features.Semesters.GetSemesters;
 using StudentManagementSystem.Api.Features.Semesters.UpdateSemester;
+using StudentManagementSystem.Api.Features.Semesters.GetSemesterOfferings;
 
 namespace StudentManagementSystem.Api.Features.Semesters;
 
@@ -17,5 +18,6 @@ public static class SemesterEndpoints
         group.MapGetSemestersEndpoint();
         group.MapUpdateSemesterEndpoint();
         group.MapDeleteSemesterEndpoint();
+        group.MapGetSemesterOfferingsEndpoint();
     }
 }

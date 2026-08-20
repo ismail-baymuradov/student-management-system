@@ -21,7 +21,17 @@ public static class DeleteCourseEndpoint
                     message = "Course not found."
                 });
             }
+var hasOfferings = await dbContext.CourseOfferings
+    .AnyAsync(o => o.CourseId == id);
 
+if (hasOfferings)
+{
+    return Results.Conflict(new
+    {
+        message =
+            "Course cannot be deleted because it has course offerings."
+    });
+}
             dbContext.Courses.Remove(course);
 
             await dbContext.SaveChangesAsync();

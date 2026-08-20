@@ -3,6 +3,7 @@ using StudentManagementSystem.Api.Features.Instructors.DeleteInstructor;
 using StudentManagementSystem.Api.Features.Instructors.GetInstructor;
 using StudentManagementSystem.Api.Features.Instructors.GetInstructors;
 using StudentManagementSystem.Api.Features.Instructors.UpdateInstructor;
+using StudentManagementSystem.Api.Features.Instructors.GetInstructorSchedule;
 
 namespace StudentManagementSystem.Api.Features.Instructors;
 
@@ -17,5 +18,6 @@ public static class InstructorEndpoints
         group.MapGetInstructorsEndpoint();
         group.MapUpdateInstructorEndpoint();
         group.MapDeleteInstructorEndpoint();
+        group.MapGetInstructorScheduleEndpoint();
     }
 }
