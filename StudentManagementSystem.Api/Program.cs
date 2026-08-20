@@ -6,6 +6,7 @@ using StudentManagementSystem.Api.Features.Departments;
 using StudentManagementSystem.Api.Features.Semesters;
 using StudentManagementSystem.Api.Features.Instructors;
 using StudentManagementSystem.Api.Features.CourseOfferings;
+using StudentManagementSystem.Api.Features.Enrollments;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,5 +37,6 @@ app.MapDepartmentEndpoints();
 app.MapSemesterEndpoints();
 app.MapInstructorEndpoints();
 app.MapCourseOfferingEndpoints();
+app.MapEnrollmentEndpoints();
 
 app.Run();

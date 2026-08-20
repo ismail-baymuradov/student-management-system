@@ -5,6 +5,7 @@ using StudentManagementSystem.Api.Features.Departments;
 using StudentManagementSystem.Api.Features.Semesters;
 using StudentManagementSystem.Api.Features.Instructors;
 using StudentManagementSystem.Api.Features.CourseOfferings;
+using StudentManagementSystem.Api.Features.Enrollments;
 
 namespace StudentManagementSystem.Api.Data;
 
@@ -22,6 +23,7 @@ public class StudentManagementDbContext : DbContext
     public DbSet<Semester> Semesters => Set<Semester>();
     public DbSet<Instructor> Instructors => Set<Instructor>();
     public DbSet<CourseOffering> CourseOfferings => Set<CourseOffering>();
+    public DbSet<Enrollment> Enrollments => Set<Enrollment>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Student configuration
@@ -189,6 +191,48 @@ offering.ToTable(t =>
         "[StartTime] < [EndTime]");
 });
     
+modelBuilder.Entity<Enrollment>(entity =>
+{
+    entity.HasKey(e => e.Id);
+
+    entity.Property(e => e.Status)
+        .HasConversion<string>()
+        .HasMaxLength(20)
+        .IsRequired();
+
+    entity.Property(e => e.EnrolledAt)
+        .IsRequired();
+
+    entity.HasIndex(e => new
+    {
+        e.StudentId,
+        e.CourseOfferingId
+    })
+    .IsUnique();
+
+    entity.HasIndex(e => new
+    {
+        e.CourseOfferingId,
+        e.Status
+    });
+
+    entity.HasIndex(e => new
+    {
+        e.StudentId,
+        e.Status
+    });
+
+    entity.HasOne(e => e.Student)
+        .WithMany(s => s.Enrollments)
+        .HasForeignKey(e => e.StudentId)
+        .OnDelete(DeleteBehavior.Restrict);
+
+    entity.HasOne(e => e.CourseOffering)
+        .WithMany(o => o.Enrollments)
+        .HasForeignKey(e => e.CourseOfferingId)
+        .OnDelete(DeleteBehavior.Restrict);
+});
+
     }
 
     

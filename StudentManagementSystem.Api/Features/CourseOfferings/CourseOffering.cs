@@ -1,7 +1,7 @@
 using StudentManagementSystem.Api.Features.Courses;
 using StudentManagementSystem.Api.Features.Instructors;
 using StudentManagementSystem.Api.Features.Semesters;
-
+using StudentManagementSystem.Api.Features.Enrollments;
 namespace StudentManagementSystem.Api.Features.CourseOfferings;
 
 public class CourseOffering
@@ -26,4 +26,5 @@ public class CourseOffering
 
     public int? InstructorId { get; set; }
     public Instructor? Instructor { get; set; }
+    public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 }
