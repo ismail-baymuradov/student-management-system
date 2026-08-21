@@ -70,13 +70,80 @@ public static class EnrollStudentEndpoint
                     e.StudentId == request.StudentId &&
                     e.CourseOfferingId == request.CourseOfferingId);
 
-            if (existingEnrollment is not null &&
-                existingEnrollment.Status == EnrollmentStatus.Active)
-            {
-                return Results.Conflict(new
+            if (existingEnrollment is not null)
+{
+    if (existingEnrollment.Status == EnrollmentStatus.Active)
+    {
+        return Results.Conflict(new
+        {
+            message =
+                "Student is already enrolled in this course offering."
+        });
+    }
+
+    if (existingEnrollment.Status == EnrollmentStatus.Completed)
+    {
+        return Results.Conflict(new
+        {
+            message =
+                "Student has already completed this course offering."
+        });
+    }
+}
+            var prerequisites = await db.CoursePrerequisites
+                .AsNoTracking()
+                .Where(cp => cp.CourseId == offering.CourseId)
+                .Select(cp => new
                 {
-                    message = "Student is already enrolled in this course offering."
-                });
+                    cp.PrerequisiteCourseId,
+                    cp.PrerequisiteCourse.Code,
+                    cp.PrerequisiteCourse.Name
+                })
+                .ToListAsync();
+
+            if (prerequisites.Count > 0)
+            {
+                var prerequisiteCourseIds = prerequisites
+                    .Select(p => p.PrerequisiteCourseId)
+                    .ToList();
+
+                var passedPrerequisiteCourseIds = await db.Enrollments
+                    .AsNoTracking()
+                    .Where(e =>
+                        e.StudentId == request.StudentId &&
+                        e.Status == EnrollmentStatus.Completed &&
+                        e.Grade != null &&
+                        e.Grade >= AcademicRules.PassingGrade &&
+                        prerequisiteCourseIds.Contains(
+                            e.CourseOffering.CourseId))
+                    .Select(e => e.CourseOffering.CourseId)
+                    .Distinct()
+                    .ToListAsync();
+
+                var passedCourseIdSet =
+                    passedPrerequisiteCourseIds.ToHashSet();
+
+                var missingPrerequisites = prerequisites
+                    .Where(p =>
+                        !passedCourseIdSet.Contains(
+                            p.PrerequisiteCourseId))
+                    .Select(p => new
+                    {
+                        id = p.PrerequisiteCourseId,
+                        code = p.Code,
+                        name = p.Name
+                    })
+                    .ToList();
+
+                if (missingPrerequisites.Count > 0)
+                {
+                    return Results.Conflict(new
+                    {
+                        message =
+                            "Student has not passed all required prerequisites.",
+                        missingPrerequisites
+                    });
+                }
             }
 
             var currentEnrollmentCount = await db.Enrollments

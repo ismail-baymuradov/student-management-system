@@ -28,6 +28,14 @@ public static class DropCourseEndpoint
             });
         }
 
+        if (enrollment.Status == EnrollmentStatus.Completed)
+        {
+            return Results.Conflict(new
+            {
+                message = "A completed enrollment cannot be dropped."
+            });
+        }
+
         enrollment.Status = EnrollmentStatus.Dropped;
         enrollment.DroppedAt = DateTimeOffset.UtcNow;
 

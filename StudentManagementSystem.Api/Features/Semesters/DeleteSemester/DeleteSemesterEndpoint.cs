@@ -21,17 +21,17 @@ public static class DeleteSemesterEndpoint
                     message = "Semester not found."
                 });
             }
-        var hasOfferings = await dbContext.CourseOfferings
-    .AnyAsync(o => o.SemesterId == id);
+            var hasOfferings = await dbContext.CourseOfferings
+        .AnyAsync(o => o.SemesterId == id);
 
-if (hasOfferings)
-{
-    return Results.Conflict(new
-    {
-        message =
-            "Semester cannot be deleted because it has course offerings."
-    });
-}
+            if (hasOfferings)
+            {
+                return Results.Conflict(new
+                {
+                    message =
+                        "Semester cannot be deleted because it has course offerings."
+                });
+            }
             dbContext.Semesters.Remove(semester);
 
             await dbContext.SaveChangesAsync();

@@ -12,7 +12,7 @@ public static class GetStudentsEndpoint
             StudentManagementDbContext dbContext) =>
         {
             var students = await dbContext.Students.AsNoTracking().ToListAsync();
-            
+
             return Results.Ok(students);
         });
     }

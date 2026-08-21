@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentManagementSystem.Api.Data;
 
@@ -11,9 +12,11 @@ using StudentManagementSystem.Api.Data;
 namespace StudentManagementSystem.Api.Migrations
 {
     [DbContext(typeof(StudentManagementDbContext))]
-    partial class StudentManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260821144536_AddCoursePrerequisites")]
+    partial class AddCoursePrerequisites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,13 +171,6 @@ namespace StudentManagementSystem.Api.Migrations
                     b.Property<DateTimeOffset>("EnrolledAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<decimal?>("Grade")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
-
-                    b.Property<DateTimeOffset?>("GradedAt")
-                        .HasColumnType("datetimeoffset");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -192,10 +188,7 @@ namespace StudentManagementSystem.Api.Migrations
 
                     b.HasIndex("StudentId", "Status");
 
-                    b.ToTable("Enrollments", t =>
-                        {
-                            t.HasCheckConstraint("CK_Enrollments_Grade", "[Grade] IS NULL OR ([Grade] >= 0 AND [Grade] <= 100)");
-                        });
+                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("StudentManagementSystem.Api.Features.Instructors.Instructor", b =>
